@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Products list</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <style>
+        td {
+            padding: 5px;
+            horiz-align: center;
+            text-align: center;
+        }
+        div {
+            width: 100%;
+        }
+        span {
+            display: block;
+            text-align: center
+        }
+
+        form
+        {
+            display: block;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+<h1 align="center">Список продуктов:</h1>
+<h4 align="center">Фильтр</h4>
+<form  method="get" th:action="@{'/products'}">
+    <input  th:value="${param.min_cost != null ? param.min_cost : ''}" type="number" placeholder="Минимальная цена" name="min_cost"/>
+    <input  th:value="${param.max_cost != null ? param.max_cost : ''}" type="number" placeholder="Максимальная цена" name="max_cost"/>
+    <button class="btn btn-primary" type="submit">Найти</button>
+</form>
+<br>
+<table border="4" width="500" align="center" th:if="${products.size() > 0}">
+    <tr>
+        <td >Id</td>
+        <td >Title</td>
+        <td >Cost</td>
+        <td >Действия</td>
+    </tr>
+    <tbody align="centre">
+    <tr th:each="b : ${products}">
+        <td th:text="${b.id}"></td>
+        <td th:text="${b.title}"></td>
+        <td th:text="${b.cost + ' р.' }"></td>
+        <td><a class="btn btn-danger" th:href="@{'/products/remove/' + ${b.id}}">Удалить</a></td>
+    </tr>
+    </tbody>
+</table>
+<br>
+
+<div class="buttons">
+    <span th:text="'Количество продуктов: ' + ${products.size()}"/>
+</div>
+<form th:action="@{'/products/add'}" method="post">
+    <br>
+    <h4>Создать или обновить продукт:</h4>
+    <input type="number" placeholder="ID (для обновления)" name="id">
+    <input type="text" name="title" placeholder="Наименование">
+    <input type="number" name="cost" placeholder="Цена">
+    <button class="btn btn-primary" type="submit">Принять</button>
+</form>
+</body>
+</html>
